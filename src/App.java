@@ -8,6 +8,7 @@ class Order {
     String type;
     double price;
     int quantity;
+    
 
     public Order(String id, String type, double price, int quantity) {
         this.id = id;
@@ -18,7 +19,7 @@ class Order {
 
     @Override
     public String toString() {
-        return String.format("Order ID: %s, Type: %s, Price: %.2f, Quantity: %d", id, type, price, quantity);
+        return String.format("Id: %s, Order: %s, Price: %.2f, Quantity: %d", id, type, price, quantity);
     }
 }
 
@@ -106,7 +107,7 @@ class OrderBook {
 
     public void printAllOrders() {
         System.out.println("\n--- All Orders ---");
-        System.out.printf("%-10s %-10s %-10s %-10s\n", "Order ID", "Type", "Price", "Quantity");
+        System.out.printf("%-10s %-10s %-10s %-10s\n", "Order Id", "Order", "Price", "Quantity");
 
         if (buyOrders.isEmpty() && sellOrders.isEmpty()) {
             System.out.println("No orders in the order book.");
@@ -133,20 +134,23 @@ public class Main {
     public static void main(String[] args) {
         OrderBook orderBook = new OrderBook();
 
-        // Adding Orders
+        // Adding Default Orders
         orderBook.addOrder(new Order("001", "Buy", 20.00, 100));
         orderBook.addOrder(new Order("002", "Sell", 25.00, 200));
+        orderBook.addOrder(new Order("004", "Buy", 23.00, 70));
+        orderBook.addOrder(new Order("005", "Sell", 28.00, 100));
+        
         
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to the Order Book System!");
 
         while (true) {
-            System.out.println("\nChoose an action:");
-            System.out.println("1. Place a new order");
-            System.out.println("2. Remove an order by ID");
-            System.out.println("3. View all orders");
-            System.out.println("4. Exit");
+            System.out.println("\nChoose an action (1-4):");
+            System.out.println("1 Place a new order");
+            System.out.println("2 Remove an order by Id");
+            System.out.println("3 View all orders");
+            System.out.println("4 Exit");
             System.out.print("Your choice: ");
             String choice = scanner.nextLine();
 
@@ -167,7 +171,7 @@ public class Main {
                     break;
 
                 case "2":
-                    System.out.print("Enter the Order ID to remove: ");
+                    System.out.print("Enter the Order Id to remove: ");
                     String removeId = scanner.nextLine();
                     orderBook.removeOrder(removeId);
                     break;
