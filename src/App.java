@@ -1,16 +1,13 @@
-import java.util.PriorityQueue;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.*;
+import java.util.Collections;
 
 class Order {
-    String id;
+    int id;
     String type;
     double price;
     int quantity;
-    
 
-    public Order(String id, String type, double price, int quantity) {
+    public Order(int id, String type, double price, int quantity) {
         this.id = id;
         this.type = type;
         this.price = price;
@@ -19,50 +16,19 @@ class Order {
 
     @Override
     public String toString() {
-        return String.format("Id: %s, Order: %s, Price: %.2f, Quantity: %d", id, type, price, quantity);
+        return String.format("Id: %d, Order: %s, Price: %.2f, Quantity: %d", id, type, price, quantity);
     }
 }
 
 class OrderBook {
     public PriorityQueue<Order> buyOrders = new PriorityQueue<>(Comparator.comparingDouble((Order o) -> -o.price));
     public PriorityQueue<Order> sellOrders = new PriorityQueue<>(Comparator.comparingDouble(o -> o.price));
-    public int orderIdCounter = 1; // Counter to auto-generate order IDs
+    public int orderIdCounter = 6; // Start generating order IDs from 6
 
-    // Process a new order (attempt to match or add to order book)
+    // Process a new order (just add it to the order book)
     public void processOrder(Order order) {
-        if (order.type.equalsIgnoreCase("Buy")) {
-            matchOrder(order, sellOrders, "Sell");
-        } else if (order.type.equalsIgnoreCase("Sell")) {
-            matchOrder(order, buyOrders, "Buy");
-        } else {
-            System.out.println("Invalid order type: " + order.type);
-            return;
-        }
-
         if (order.quantity > 0) {
             addOrder(order);
-        }
-    }
-
-    public void matchOrder(Order order, PriorityQueue<Order> oppositeQueue, String oppositeType) {
-        while (order.quantity > 0 && !oppositeQueue.isEmpty()) {
-            Order bestMatch = oppositeQueue.peek();
-
-            if ((order.type.equals("Buy") && order.price >= bestMatch.price) ||
-                (order.type.equals("Sell") && order.price <= bestMatch.price)) {
-
-                int matchedQuantity = Math.min(order.quantity, bestMatch.quantity);
-                System.out.println("Matching " + order + " with " + bestMatch + " for quantity " + matchedQuantity);
-
-                order.quantity -= matchedQuantity;
-                bestMatch.quantity -= matchedQuantity;
-
-                if (bestMatch.quantity == 0) {
-                    oppositeQueue.poll();
-                }
-            } else {
-                break;
-            }
         }
     }
 
@@ -77,7 +43,7 @@ class OrderBook {
         displayBestPrices();
     }
 
-    public void removeOrder(String orderId) {
+    public void removeOrder(int orderId) {
         boolean removed = removeOrderFromQueue(buyOrders, orderId) || removeOrderFromQueue(sellOrders, orderId);
         if (removed) {
             System.out.println("Removed Order ID: " + orderId);
@@ -87,12 +53,12 @@ class OrderBook {
         displayBestPrices();
     }
 
-    public boolean removeOrderFromQueue(PriorityQueue<Order> queue, String orderId) {
+    public boolean removeOrderFromQueue(PriorityQueue<Order> queue, int orderId) {
         Iterator<Order> iterator = queue.iterator();
         while (iterator.hasNext()) {
             Order order = iterator.next();
-            if (order.id.equals(orderId)) {
-                iterator.remove();
+            if (order.id == orderId) { // Use == for primitive int comparison
+                iterator.remove(); // Remove the current item safely
                 return true;
             }
         }
@@ -109,24 +75,25 @@ class OrderBook {
         System.out.println("\n--- All Orders ---");
         System.out.printf("%-10s %-10s %-10s %-10s\n", "Order Id", "Order", "Price", "Quantity");
 
-        if (buyOrders.isEmpty() && sellOrders.isEmpty()) {
+        // Combine and sort all orders by ID
+        List<Order> allOrders = new ArrayList<>();
+        allOrders.addAll(buyOrders);
+        allOrders.addAll(sellOrders);
+        allOrders.sort(Comparator.comparingInt(order -> order.id));
+
+        if (allOrders.isEmpty()) {
             System.out.println("No orders in the order book.");
             return;
         }
 
-        // Print Buy Orders
-        for (Order order : buyOrders) {
-            System.out.printf("%-10s %-10s %-10.2f %-10d\n", order.id, order.type, order.price, order.quantity);
-        }
-
-        // Print Sell Orders
-        for (Order order : sellOrders) {
-            System.out.printf("%-10s %-10s %-10.2f %-10d\n", order.id, order.type, order.price, order.quantity);
+        // Print each order in the sorted list
+        for (Order order : allOrders) {
+            System.out.printf("%03d       %-10s %-10.2f %-10d\n", order.id, order.type, order.price, order.quantity);
         }
     }
 
-    public String generateOrderId() {
-        return String.format("%03d", orderIdCounter++);
+    public int generateOrderId() {
+        return orderIdCounter++;  // Increment after returning the current value
     }
 }
 
@@ -135,12 +102,11 @@ public class Main {
         OrderBook orderBook = new OrderBook();
 
         // Adding Default Orders
-        orderBook.addOrder(new Order("001", "Buy", 20.00, 100));
-        orderBook.addOrder(new Order("002", "Sell", 25.00, 200));
-        orderBook.addOrder(new Order("004", "Buy", 23.00, 70));
-        orderBook.addOrder(new Order("005", "Sell", 28.00, 100));
-        
-        
+        orderBook.addOrder(new Order(1, "Buy", 20.00, 100));
+        orderBook.addOrder(new Order(2, "Sell", 25.00, 200));
+        orderBook.addOrder(new Order(4, "Buy", 23.00, 70));
+        orderBook.addOrder(new Order(5, "Sell", 28.00, 100));
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to the Order Book System!");
@@ -165,14 +131,14 @@ public class Main {
                     System.out.print("Quantity: ");
                     int quantity = Integer.parseInt(scanner.nextLine());
 
-                    String orderId = orderBook.generateOrderId();
+                    int orderId = orderBook.generateOrderId();  // This will start from 6
                     Order order = new Order(orderId, type, price, quantity);
                     orderBook.processOrder(order);
                     break;
 
                 case "2":
                     System.out.print("Enter the Order Id to remove: ");
-                    String removeId = scanner.nextLine();
+                    int removeId = Integer.parseInt(scanner.nextLine()); // Convert the input to an int
                     orderBook.removeOrder(removeId);
                     break;
 
