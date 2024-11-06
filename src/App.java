@@ -132,6 +132,11 @@ class OrderBook {
 public class Main {
     public static void main(String[] args) {
         OrderBook orderBook = new OrderBook();
+
+        // Adding Orders
+        orderBook.addOrder(new Order("001", "Buy", 20.00, 100));
+        orderBook.addOrder(new Order("002", "Sell", 25.00, 200));
+        
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Welcome to the Order Book System!");
