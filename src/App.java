@@ -23,9 +23,9 @@ class Order {
 }
 
 class OrderBook {
-    private PriorityQueue<Order> buyOrders = new PriorityQueue<>(Comparator.comparingDouble((Order o) -> -o.price));
-    private PriorityQueue<Order> sellOrders = new PriorityQueue<>(Comparator.comparingDouble(o -> o.price));
-    private int orderIdCounter = 1; // Counter to auto-generate order IDs
+    public PriorityQueue<Order> buyOrders = new PriorityQueue<>(Comparator.comparingDouble((Order o) -> -o.price));
+    public PriorityQueue<Order> sellOrders = new PriorityQueue<>(Comparator.comparingDouble(o -> o.price));
+    public int orderIdCounter = 1; // Counter to auto-generate order IDs
 
     // Process a new order (attempt to match or add to order book)
     public void processOrder(Order order) {
@@ -43,7 +43,7 @@ class OrderBook {
         }
     }
 
-    private void matchOrder(Order order, PriorityQueue<Order> oppositeQueue, String oppositeType) {
+    public void matchOrder(Order order, PriorityQueue<Order> oppositeQueue, String oppositeType) {
         while (order.quantity > 0 && !oppositeQueue.isEmpty()) {
             Order bestMatch = oppositeQueue.peek();
 
@@ -65,7 +65,7 @@ class OrderBook {
         }
     }
 
-    private void addOrder(Order order) {
+    public void addOrder(Order order) {
         if (order.type.equalsIgnoreCase("Buy")) {
             buyOrders.add(order);
             System.out.println("Added Buy Order: " + order);
@@ -86,7 +86,7 @@ class OrderBook {
         displayBestPrices();
     }
 
-    private boolean removeOrderFromQueue(PriorityQueue<Order> queue, String orderId) {
+    public boolean removeOrderFromQueue(PriorityQueue<Order> queue, String orderId) {
         Iterator<Order> iterator = queue.iterator();
         while (iterator.hasNext()) {
             Order order = iterator.next();
