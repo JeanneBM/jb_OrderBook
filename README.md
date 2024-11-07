@@ -18,21 +18,22 @@ The Order class represents an individual order with the following fields:
 - `type`: Type of the order ("Buy" or "Sell").
 - `price`: Price per unit of the order.
 - `quantity`: Quantity of units in the order.
+  
 The class includes a constructor to initialize an order and an overridden toString() method to display order information.
 
 ### OrderBook
 The OrderBook class manages buy and sell orders in two PriorityQueues:
-- buyOrders: Orders sorted by descending price to prioritize higher buy prices.
-- sellOrders: Orders sorted by ascending price to prioritize lower sell prices.
+- `buyOrders`: Orders sorted by descending price to prioritize higher buy prices.
+- `sellOrders`: Orders sorted by ascending price to prioritize lower sell prices.
 #### Key Methods
-- processOrder(Order order): Processes and adds new orders.
-- addOrder(Order order): Adds a new buy or sell order to the appropriate queue.
-- removeOrder(int orderId): Removes an order by ID, updating the removed orders list.
-- removeOrderFromQueue(PriorityQueue<Order> queue, int orderId): Helper method to find and remove an order from a queue.
-- displayBestPrices(): Displays the highest buy and lowest sell prices.
-- printAllOrders(): Displays all active orders.
-- printRemovedOrders(): Displays all removed orders.
-- generateOrderId(): Generates a unique ID for each new order.
+- `processOrder(Order order)`: Processes and adds new orders.
+- `addOrder(Order order)`: Adds a new buy or sell order to the appropriate queue.
+- `removeOrder(int orderId)`: Removes an order by ID, updating the removed orders list.
+- `removeOrderFromQueue(PriorityQueue<Order> queue, int orderId)`: Helper method to find and remove an order from a queue.
+- `displayBestPrices()`: Displays the highest buy and lowest sell prices.
+- `printAllOrders()`: Displays all active orders.
+- `printRemovedOrders()`: Displays all removed orders.
+- `generateOrderId()`: Generates a unique ID for each new order.
 ### Main
 The Main class is the entry point of the program. It initializes an OrderBook and provides a menu-driven console interface for users to interact with the order book.
 
