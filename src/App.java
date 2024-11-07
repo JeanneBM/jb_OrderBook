@@ -56,8 +56,8 @@ class OrderBook {
         Iterator<Order> iterator = queue.iterator();
         while (iterator.hasNext()) {
             Order order = iterator.next();
-            if (order.id == orderId) { // Use == for primitive int comparison
-                iterator.remove(); // Remove the current item safely
+            if (order.id == orderId) { // Use == for int comparison
+                iterator.remove(); // Remove the current item 
                 return true;
             }
         }
