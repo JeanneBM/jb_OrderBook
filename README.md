@@ -22,35 +22,33 @@ The class includes a constructor to initialize an order and an overridden toStri
 
 ### OrderBook
 The OrderBook class manages buy and sell orders in two PriorityQueues:
-
-buyOrders: Orders sorted by descending price to prioritize higher buy prices.
-sellOrders: Orders sorted by ascending price to prioritize lower sell prices.
+- buyOrders: Orders sorted by descending price to prioritize higher buy prices.
+- sellOrders: Orders sorted by ascending price to prioritize lower sell prices.
 #### Key Methods
-processOrder(Order order): Processes and adds new orders.
-addOrder(Order order): Adds a new buy or sell order to the appropriate queue.
-removeOrder(int orderId): Removes an order by ID, updating the removed orders list.
-removeOrderFromQueue(PriorityQueue<Order> queue, int orderId): Helper method to find and remove an order from a queue.
-displayBestPrices(): Displays the highest buy and lowest sell prices.
-printAllOrders(): Displays all active orders.
-printRemovedOrders(): Displays all removed orders.
-generateOrderId(): Generates a unique ID for each new order.
+- processOrder(Order order): Processes and adds new orders.
+- addOrder(Order order): Adds a new buy or sell order to the appropriate queue.
+- removeOrder(int orderId): Removes an order by ID, updating the removed orders list.
+- removeOrderFromQueue(PriorityQueue<Order> queue, int orderId): Helper method to find and remove an order from a queue.
+- displayBestPrices(): Displays the highest buy and lowest sell prices.
+- printAllOrders(): Displays all active orders.
+- printRemovedOrders(): Displays all removed orders.
+- generateOrderId(): Generates a unique ID for each new order.
 ### Main
 The Main class is the entry point of the program. It initializes an OrderBook and provides a menu-driven console interface for users to interact with the order book.
 
 ## Features
-Place a new order: Users can place buy or sell orders with specified price and quantity.
-Remove an order: Allows users to remove an order by its unique ID.
-View all orders: Displays all current active orders in the system.
-View removed orders: Shows a list of all removed orders.
-Display best prices: Automatically shows the best buy and sell prices whenever an order is added or removed.
+- Place a new order: Users can place buy or sell orders with specified price and quantity.
+- Remove an order: Allows users to remove an order by its unique ID.
+- View all orders: Displays all current active orders in the system.
+- View removed orders: Shows a list of all removed orders.
+- Display best prices: Automatically shows the best buy and sell prices whenever an order is added or removed.
 ## Usage
-Clone or download this repository.
-Compile and run the Main class.
-bash
-
+1. Clone or download this repository.
+2. Compile and run the Main class.
+```
 javac Main.java
 java Main
-
+```
 ## Example Interaction
 ```
 Welcome to the Order Book System!
