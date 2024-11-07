@@ -22,12 +22,13 @@ class Order {
 class OrderBook {
     public PriorityQueue<Order> buyOrders = new PriorityQueue<>(Comparator.comparingDouble((Order o) -> -o.price));
     public PriorityQueue<Order> sellOrders = new PriorityQueue<>(Comparator.comparingDouble(o -> o.price));
+    public List<Order> removedOrders = new ArrayList<>();
     public int orderIdCounter = 6; // Start generating order IDs from 6
 
-    // Process a new order (just add it to the order book)
     public void processOrder(Order order) {
         if (order.quantity > 0) {
             addOrder(order);
+            displayBestPrices();
         }
     }
 
@@ -39,12 +40,15 @@ class OrderBook {
             sellOrders.add(order);
             System.out.println("Added Sell Order: " + order);
         }
-        displayBestPrices();
     }
 
     public void removeOrder(int orderId) {
-        boolean removed = removeOrderFromQueue(buyOrders, orderId) || removeOrderFromQueue(sellOrders, orderId);
-        if (removed) {
+        Order removedOrder = removeOrderFromQueue(buyOrders, orderId);
+        if (removedOrder == null) {
+            removedOrder = removeOrderFromQueue(sellOrders, orderId);
+        }
+        if (removedOrder != null) {
+            removedOrders.add(removedOrder);
             System.out.println("Removed Order ID: " + orderId);
         } else {
             System.out.println("Order ID not found: " + orderId);
@@ -52,16 +56,16 @@ class OrderBook {
         displayBestPrices();
     }
 
-    public boolean removeOrderFromQueue(PriorityQueue<Order> queue, int orderId) {
+    public Order removeOrderFromQueue(PriorityQueue<Order> queue, int orderId) {
         Iterator<Order> iterator = queue.iterator();
         while (iterator.hasNext()) {
             Order order = iterator.next();
-            if (order.id == orderId) { // Use == for int comparison
-                iterator.remove(); // Remove the current item 
-                return true;
+            if (order.id == orderId) {
+                iterator.remove();
+                return order;
             }
         }
-        return false;
+        return null;
     }
 
     public void displayBestPrices() {
@@ -74,7 +78,6 @@ class OrderBook {
         System.out.println("\n--- All Orders ---");
         System.out.printf("%-10s %-10s %-10s %-10s\n", "Order Id", "Order", "Price", "Quantity");
 
-        // Combine and sort all orders by ID
         List<Order> allOrders = new ArrayList<>();
         allOrders.addAll(buyOrders);
         allOrders.addAll(sellOrders);
@@ -85,8 +88,21 @@ class OrderBook {
             return;
         }
 
-        // Print each order in the sorted list
         for (Order order : allOrders) {
+            System.out.printf("%03d       %-10s %-10.2f %-10d\n", order.id, order.type, order.price, order.quantity);
+        }
+    }
+
+    public void printRemovedOrders() {
+        System.out.println("\n--- Removed Orders ---");
+        System.out.printf("%-10s %-10s %-10s %-10s\n", "Order Id", "Order", "Price", "Quantity");
+
+        if (removedOrders.isEmpty()) {
+            System.out.println("No removed orders.");
+            return;
+        }
+
+        for (Order order : removedOrders) {
             System.out.printf("%03d       %-10s %-10.2f %-10d\n", order.id, order.type, order.price, order.quantity);
         }
     }
@@ -103,19 +119,23 @@ public class Main {
         // Adding Default Orders
         orderBook.addOrder(new Order(1, "Buy", 20.00, 100));
         orderBook.addOrder(new Order(2, "Sell", 25.00, 200));
+        orderBook.addOrder(new Order(3, "Buy", 23.00, 50));
         orderBook.addOrder(new Order(4, "Buy", 23.00, 70));
         orderBook.addOrder(new Order(5, "Sell", 28.00, 100));
 
+        orderBook.removeOrder(3);
+
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Welcome to the Order Book System!");
+        System.out.println("\nWelcome to the Order Book System!");
 
         while (true) {
-            System.out.println("\nChoose an action (1-4):");
+            System.out.println("\nChoose an action (1-5):");
             System.out.println("1 Place a new order");
             System.out.println("2 Remove an order by Id");
             System.out.println("3 View all orders");
-            System.out.println("4 Exit");
+            System.out.println("4 View removed orders");
+            System.out.println("5 Exit");
             System.out.print("Your choice: ");
             String choice = scanner.nextLine();
 
@@ -130,14 +150,14 @@ public class Main {
                     System.out.print("Quantity: ");
                     int quantity = Integer.parseInt(scanner.nextLine());
 
-                    int orderId = orderBook.generateOrderId();  // This will start from 6
+                    int orderId = orderBook.generateOrderId();
                     Order order = new Order(orderId, type, price, quantity);
                     orderBook.processOrder(order);
                     break;
 
                 case "2":
                     System.out.print("Enter the Order Id to remove: ");
-                    int removeId = Integer.parseInt(scanner.nextLine()); // Convert the input to an int
+                    int removeId = Integer.parseInt(scanner.nextLine());
                     orderBook.removeOrder(removeId);
                     break;
 
@@ -146,6 +166,10 @@ public class Main {
                     break;
 
                 case "4":
+                    orderBook.printRemovedOrders();
+                    break;
+
+                case "5":
                     System.out.println("Exiting Order Book System.");
                     scanner.close();
                     return;
