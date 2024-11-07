@@ -25,7 +25,7 @@ The OrderBook class manages buy and sell orders in two PriorityQueues:
 
 buyOrders: Orders sorted by descending price to prioritize higher buy prices.
 sellOrders: Orders sorted by ascending price to prioritize lower sell prices.
-## Key Methods
+#### Key Methods
 processOrder(Order order): Processes and adds new orders.
 addOrder(Order order): Adds a new buy or sell order to the appropriate queue.
 removeOrder(int orderId): Removes an order by ID, updating the removed orders list.
