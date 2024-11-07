@@ -43,7 +43,7 @@ Remove an order: Allows users to remove an order by its unique ID.
 View all orders: Displays all current active orders in the system.
 View removed orders: Shows a list of all removed orders.
 Display best prices: Automatically shows the best buy and sell prices whenever an order is added or removed.
-Usage
+## Usage
 Clone or download this repository.
 Compile and run the Main class.
 bash
