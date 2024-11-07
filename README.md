@@ -2,13 +2,14 @@
 This Java program simulates a simple order book system for managing buy and sell orders. It allows users to place orders, remove them, view active and removed orders, and see the best prices for buy and sell orders.
 
 ## Table of Contents
-Classes
-Order
-OrderBook
-Main
-Features
-Usage
-Example Interaction
+- [Classes](##Classes)
+  - [Order](###Order)
+  - [OrderBook](###OrderBook)
+  - [Main](###Main)
+- [Features](##Features)
+- [Usage](##Usage)
+- [Example Interaction](##ExampleInteraction)
+  
 ## Classes
 ### Order
 The Order class represents an individual order with the following fields:
