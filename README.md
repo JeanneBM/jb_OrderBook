@@ -35,14 +35,14 @@ The OrderBook class manages buy and sell orders in two PriorityQueues:
 - `printRemovedOrders()`: Displays all removed orders.
 - `generateOrderId()`: Generates a unique ID for each new order.
 ### Main
-The Main class is the entry point of the program. It initializes an OrderBook and provides a menu-driven console interface for users to interact with the order book.
+The `Main` class is the entry point of the program. It initializes an `OrderBook` and provides a menu-driven console interface for users to interact with the order book.
 
 ## Features
-- Place a new order: Users can place buy or sell orders with specified price and quantity.
-- Remove an order: Allows users to remove an order by its unique ID.
-- View all orders: Displays all current active orders in the system.
-- View removed orders: Shows a list of all removed orders.
-- Display best prices: Automatically shows the best buy and sell prices whenever an order is added or removed.
+- **Place a new order**: Users can place buy or sell orders with specified price and quantity.
+- **Remove an order**: Allows users to remove an order by its unique ID.
+- **View all orders**: Displays all current active orders in the system.
+- **View removed orders**: Shows a list of all removed orders.
+- **Display best prices**: Automatically shows the best buy and sell prices whenever an order is added or removed.
 ## Usage
 1. Clone or download this repository.
 2. Compile and run the Main class.
